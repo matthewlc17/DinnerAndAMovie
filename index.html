@@ -1,5 +1,3 @@
-{% load staticfiles %}
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +5,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{% block title %}Home{% endblock title %} | DinnerAndAMovie</title>
+    <title>Home | DinnerAndAMovie</title>
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
@@ -22,12 +20,6 @@
     <script src="{% static '/homepage/materialize.min.js' %}"></script>
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <!-- <link href="{% static 'main.css' %}" rel="stylesheet" type="text/css"> -->
-
-    {% block resources %}
-    {% endblock resources %}
 
     <!-- favicon -->
     <!-- <link rel="icon" type="image/png" sizes="32x32" href="{% static '' %}"> -->
@@ -63,9 +55,9 @@
         }(document, 'script', 'facebook-jssdk'));
     </script>
     <header>
-        <nav>
+        <nav style="position:fixed;">
             <div class="nav-wrapper">
-                <a href="/" class="brand-logo"><!--<img src="{% static '/homepage/XLR8_large_colored_lightback.png' %}" style="width:100px;"/>-->Dinner and a Movie</a>
+                <a href="/" class="brand-logo"><img src="{% static '/homepage/XLR8_large_colored_lightback.png' %}" style="width:100px;"/></a>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                     <li><a href="sass.html">Sass</a></li>
                     <li><a href="badges.html">Components</a></li>
@@ -74,50 +66,65 @@
             </div>
         </nav>
     </header>
-    <!-- <div class="container">
-        <ul class="collection">
-            <li class="collection-item avatar">
-              <img src="images/yuna.jpg" alt="" class="circle">
-              <span class="title">Title</span>
-              <p>First Line <br>
-                 Second Line
-              </p>
-              <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-            </li>
-            <li class="collection-item avatar">
-              <i class="material-icons circle">folder</i>
-              <span class="title">Title</span>
-              <p>First Line <br>
-                 Second Line
-              </p>
-              <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-            </li>
-            <li class="collection-item avatar">
-              <i class="material-icons circle green">insert_chart</i>
-              <span class="title">Title</span>
-              <p>First Line <br>
-                 Second Line
-              </p>
-              <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-            </li>
-            <li class="collection-item avatar">
-              <i class="material-icons circle red">play_arrow</i>
-              <span class="title">Title</span>
-              <p>First Line <br>
-                 Second Line
-              </p>
-              <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-            </li>
-        </ul>
+    <div class="parallax-container">
+      <div class="parallax"><img src="{% static '/homepage/pexels-photo.jpg' %}" style="width:100%"></div>
+      <a href="/" style="display:inline-block;"><div style="width:280px;height:75px;border:solid;margin-top:300px;margin-left:65%;text-align:center;position:absolute;"><h3 style="line-height:.35;">Learn More</h3></div></a>
+    </div>
+    <div class="section white">
+      <div class="row container">
+        <h2 class="header">Input Your Video Game Information</h2>
+        <p class="grey-text text-darken-3 lighten-3">
+            <form class="" action="/homepage/landingpage/" method="post">
+                {% csrf_token %}
+                {{form}}
+                <input class="btn btn-success" value="Save" type="submit"></input>
+            </form>
+        </p>
+      </div>
+    </div>
+    <div class="parallax-container">
+      <div class="parallax"><img src="{% static '/homepage/pexels-photo.jpg' %}" style="width:100%"></div>
+    </div>
+    <!-- <div class="parallax-container">
+      <div class="parallax"><img src="{% static 'pexels-photo.jpg' %}"></div>
     </div> -->
-    {% block content %}
 
 
 
-    {% endblock content %}
-<!-- <script type="text/javascript" src="{% static "main.js" %}"></script>
-<script type="text/javascript" src="{% static "lottie.js" %}"></script>
-<script type="text/javascript" src="{% static "animation.js" %}"></script> -->
+    <script type="text/javascript">
+    var elem = document.querySelector('.parallax');
+    var instance = M.Parallax.getInstance(elem);
+
+    $(document).ready(function(){
+        console.log('ready');
+        $('.parallax').parallax();
+    });
+
+    $.ajax({
+        url: 'https://api.yelp.com/v3/businesses/search',
+        // data: { signature: authHeader },
+        type: 'GET',
+        // dataType: 'jsonp',
+        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'BEARER ' + 'If7Lz8Ce0ztLHqJgjH1OmYE6AP5v9G8KfkavKSS7ZdGHNp8LFt2aWvLxwOYptHPuaJeP__NvLz94Xl6-dLFNLdubwqhxiIzChk7alsS4zw653MH4fqKZfcz67IbGWnYx');},
+        headers: {
+            'Authorization': 'Bearer If7Lz8Ce0ztLHqJgjH1OmYE6AP5v9G8KfkavKSS7ZdGHNp8LFt2aWvLxwOYptHPuaJeP__NvLz94Xl6-dLFNLdubwqhxiIzChk7alsS4zw653MH4fqKZfcz67IbGWnYx',
+        },
+        crossDomain: true,
+        latitude: 40.2599,
+        longitude: -111.6692,
+        radius: 400001,
+        success: successCallback,
+        error: failureCallback
+    })
+    function successCallback(response) {
+        console.log(response);
+    }
+    function failureCallback(response) {
+        console.log('failure');
+        console.log(response);
+    }
+    </script>
+
 
 </body>
 

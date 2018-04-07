@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block resources %}
+<link href="{% static '/homepage/results.css' %}" rel="stylesheet" type="text/css">
+{% endblock resources %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <ul class="collapsible" id="movie_list" data-length="{{businesses|length}}">
+            {% for business in businesses %}
+            <li id="business-{{forloop.counter}}" data-lat="{{business.coordinates.latitude}}" data-lon="{{business.coordinates.longitude}}" data-name="{{business.name}}">
+                <div class="collapsible-header">
+                    <i class="material-icons">place</i>
+                    {{business.name}}
+                    <span class="new badge">{{business.distance}} mi</span></div>
+                <div class="collapsible-body">
+                    <p>{{business.location.address1}}</p>
+                    <p>{{business.phone}}</p>
+                    <p>Rating: {{business.rating}}</p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-md-8 text-center" style="margin-top: 5px;">
+        <div id="map"></div>
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+    $('.collapsible').collapsible();
+});
+function initMap() {
+    let mylat = $('#business-1').data('lat');
+    let mylon = $('#business-1').data('lon');
+    let movie_length = $('#movie_list').data("length");
+    let mymarkers = []
+    console.log(movie_length);
+    let uluru = {lat: mylat, lng: mylon};
+    map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 12,
+      center: uluru
+    //   maxZoom: 15
+    });
+    // var marker = new google.maps.Marker({
+    //     position: {lat: mylat, lng: mylon},
+    //     map: map
+    // });
+    for (let i = 1; i <= movie_length; i++) {
+        let myID = '#' + 'business-' + i;
+        let markerlat = $(myID).data('lat');
+        let markerlon = $(myID).data('lon');
+        let markername = $(myID).data('name');
+        var marker = new google.maps.Marker({
+            position: {lat: markerlat, lng: markerlon},
+            map: map,
+            title: markername,
+            label: markername,
+            animation: google.maps.Animation.DROP
+        });
+        mymarkers.push(marker);
+    }
+    if (mymarkers.length > 1) {
+            let latlng = [];
+            mymarkers.forEach(function (marker) {
+                latlng.push(new google.maps.LatLng(marker.position.lat(), marker.position.lng()));
+            });
+            let latlngbounds = new google.maps.LatLngBounds();
+            latlng.forEach(function (myLatLng) {
+                latlngbounds.extend(myLatLng);
+            });
+            map.fitBounds(latlngbounds);
+        } else if (mymarkers.length === 1) {
+            map.setZoom(11);
+            map.panTo(gmMarkers[0].position);
+        } else {
+            map.setZoom(11);
+            map.panTo(uluru);
+        }
+}
+</script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuPLtrF4MskjIwthQz0jITvbY3gt3kOH0&callback=initMap">
+</script>
+{% endblock content %}
