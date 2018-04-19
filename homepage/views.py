@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django import forms
@@ -47,7 +48,7 @@ def theaters(request, location):
         'categories': 'movietheaters',
     }
     headers = {
-        'Authorization': 'Bearer %s' % 'If7Lz8Ce0ztLHqJgjH1OmYE6AP5v9G8KfkavKSS7ZdGHNp8LFt2aWvLxwOYptHPuaJeP__NvLz94Xl6-dLFNLdubwqhxiIzChk7alsS4zw653MH4fqKZfcz67IbGWnYx',
+        'Authorization': 'Bearer %s' % settings.YELP_KEY,
     }
     response = requests.request('GET', 'https://api.yelp.com/v3/businesses/search', headers=headers, params=url_params)
     myresponse = response.json()
