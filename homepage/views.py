@@ -9,7 +9,6 @@ from datetime import datetime
 from django.core.mail import send_mail
 from django.template.loader import render_to_string, get_template
 import requests
-from django.contrib.gis.geoip2 import GeoIP2
 import json
 
 # Create your views here.
