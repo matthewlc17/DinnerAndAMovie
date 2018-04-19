@@ -257,6 +257,9 @@ const dinnermovie = (function () {
             if (restaurants.includes(yelp_id)) {
                 $(star_id).data("full", 1);
                 $(star_id).attr("src", $(star_id).data("full_star"));
+            } else if (theaters.includes(yelp_id)) {
+                $(star_id).data("full", 1);
+                $(star_id).attr("src", $(star_id).data("full_star"));
             }
         }
     }
