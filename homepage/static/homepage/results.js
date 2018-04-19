@@ -15,6 +15,7 @@ const dinnermovie = (function () {
     var loginButton =  document.querySelector("#loginButton");
     var logoutButton = document.querySelector("#logoutButton");
     let restaurants = [];
+    let theaters = [];
 
     let user;
     let mymarkers = [];
@@ -85,6 +86,12 @@ const dinnermovie = (function () {
                     firestore.collection("users").doc(user.uid).collection("restaurants").get().then(function(querySnapshot) {
                         querySnapshot.forEach(function(doc) {
                             restaurants.push(doc.id);
+                        });
+                        callback();
+                    });
+                    firestore.collection("users").doc(user.uid).collection("theaters").get().then(function(querySnapshot) {
+                        querySnapshot.forEach(function(doc) {
+                            theaters.push(doc.id);
                         });
                         callback();
                     });
