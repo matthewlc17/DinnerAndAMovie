@@ -23,7 +23,7 @@
                     <p>{{business.location.address1}}</p>
                     <p id="bus-phone-{{forloop.counter}}">{{business.phone}}</p>
                     <p>Rating: {{business.rating}}</p>
-                    <a class="waves-effect waves-light btn" href="{{business.url}}" target="_blank">Yelp Page</a>
+                    <a class="waves-effect waves-light btn" href="/restuarants/{{business.coordinates.latitude}}/{{business.coordinates.longitude}}" target="_blank">View Restaurants</a>
                 </div>
             </li>
             {% endfor %}

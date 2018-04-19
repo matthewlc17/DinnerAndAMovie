@@ -26,7 +26,7 @@ SECRET_KEY = '(5n^u0li*#v7p9f19q-pk_zwwgh#2p4w1nj&bv6vz^hemt)&4-'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'dinnerandamovie.herokuapp.com',
+    'dinnerandamovielocator.herokuapp.com',
     '127.0.0.1',
 ]
 
