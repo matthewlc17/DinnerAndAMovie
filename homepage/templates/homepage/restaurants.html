@@ -2,6 +2,7 @@
 {% load staticfiles %}
 
 {% block resources %}
+<script src="{% static '/homepage/results.js' %}"></script>
 <link href="{% static '/homepage/results.css' %}" rel="stylesheet" type="text/css">
 {% endblock resources %}
 
@@ -14,10 +15,10 @@
             <li id="business-{{forloop.counter}}" data-lat="{{business.coordinates.latitude}}" data-lon="{{business.coordinates.longitude}}" data-name="{{business.name}}">
                 <div class="collapsible-header valign-wrapper" id="header-{{forloop.counter}}">
                     <!-- <i class="material-icons">place</i> -->
-                    <i class="material-icons">place</i>
+                    <img src="{{business.image_url}}" alt="" class="circle bus_image">
                     <span class="bus-name">{{business.name}}</span>
-                    <span class="new badge" data-badge-caption="">{{business.distance}} miles</span>
-                    <a href="#"><img src="{% static '/homepage/stars/gray-star.png' %}" class="star" data-type="theater" id="star-{{forloop.counter}}" data-gray_star="{% static '/homepage/stars/gray-star.png' %}" data-full_star="{% static '/homepage/stars/full-star.png' %}" data-full="0" data-yelp_id="{{business.id}}" data-address="{{business.location.address1}}" data-phone="{{business.phone}}" data-rating="{{business.rating}}" data-name="{{business.name}}" data-image="{{business.image_url}}" data-src="{% static '/homepage/stars/gray-star.png' %}" /></a>
+                    <span class="new badge" data-badge-caption="">{{business.rating}} stars</span>
+                    <a href="#"><img src="{% static '/homepage/stars/gray-star.png' %}" class="star" data-type="restaurant" id="star-{{forloop.counter}}" data-gray_star="{% static '/homepage/stars/gray-star.png' %}" data-full_star="{% static '/homepage/stars/full-star.png' %}" data-full="0" data-yelp_id="{{business.id}}" data-address="{{business.location.address1}}" data-phone="{{business.phone}}" data-rating="{{business.rating}}" data-name="{{business.name}}" data-image="{{business.image_url}}" data-src="{% static '/homepage/stars/gray-star.png' %}" /></a>
                 </div>
                 <div class="collapsible-body">
                     <p>{{business.location.address1}}</p>

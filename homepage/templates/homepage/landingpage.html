@@ -1,38 +1,167 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% block resources %}
+<link href="{% static '/homepage/results.css' %}" rel="stylesheet" type="text/css">
+{% endblock resources %}
 
 {% block content %}
-    <div class="parallax-container">
-      <div class="parallax"><img src="{% static '/homepage/pexels-photo.jpg' %}" style="width:100%"></div>
-      <a href="/" style="display:inline-block;"><div style="width:280px;height:75px;border:solid;margin-top:300px;margin-left:65%;text-align:center;position:absolute;"><h3 style="line-height:.35;">Learn More</h3></div></a>
-    </div>
-    <div class="section white">
-      <div class="row container">
-        <h2 class="header">Input Your Location dfadsfasfdfas</h2><br />
-        <p class="grey-text text-darken-3 lighten-3">
-            <form class="" action="/homepage/landingpage/" method="post">
-                {% csrf_token %}
-                {{form}}
-                <input class="btn btn-success" value="Save" type="submit"></input>
-            </form>
-        </p>
+    <div class="parallax-container text-center" style="color:white;">
+      <div class="parallax"><img src="{% static '/homepage/cinema.jpg' %}" style="width:100%"></div>
+      <h1 class="" id="landing-title">
+        <strong>Dinner And A Movie</strong>
+      </h1>
+      <div class="col-md-8 offset-md-2">
+          <h3 class="hide-on-small-only"><strong>Dinner and a Movie allows you to see what restaurants are nearest the movie theater of your choosing.</strong></h3>
+          <h4 class="show-on-small hide-on-med-and-up"><strong>Dinner and a Movie allows you to see what restaurants are nearest the movie theater of your choosing.</strong></h4>
+          <a href="/" style="display:inline-block;"><div style="width:280px;height:75px;border:solid;margin-top:300px;margin-left:45%;text-align:center;position:absolute;"><h3 style="line-height:.35;">Learn More</h3></div></a>
       </div>
     </div>
-    <div class="parallax-container">
-      <div class="parallax"><img src="{% static '/homepage/pexels-photo.jpg' %}" style="width:100%"></div>
+    <div class="section white">
+      <div class="container">
+        <h2 class="header">Input Your Location To Find Local Theaters</h2><br />
+        <div class="col m4">
+            <p class="grey-text text-darken-3 lighten-3">
+                <form class="" action="/homepage/landingpage/" method="post">
+                    {% csrf_token %}
+                    {{form}}
+                    <input class="btn btn-success" value="Save" type="submit"></input>
+                </form>
+            </p>
+        </div>
+        <h2 class="text-center">FAVORITES</h2>
+      </div>
     </div>
-    <!-- <div class="parallax-container">
-      <div class="parallax"><img src="{% static 'pexels-photo.jpg' %}"></div>
-    </div> -->
+    <div class="parallax-container" style="height:100%;">
+      <div class="parallax"><img src="{% static '/homepage/popcorn.jpg' %}" style="width:100%"></div>
+      <div class="row">
+          <div id="restaurants" class="col m6"></div>
+          <div id="theaters" class="col m6"></div>
+      </div>
+    </div>
 
 
 
     <script type="text/javascript">
     var elem = document.querySelector('.parallax');
     var instance = M.Parallax.getInstance(elem);
-
     $(document).ready(function(){
         $('.parallax').parallax();
+        // dinnermovie.getFavorites();
+        firebase.auth().onAuthStateChanged(function(tempuser) {
+            let yelp_theater_ids = [];
+            let yelp_restaurant_ids = [];
+            if (tempuser) {
+                user = tempuser;
+                let theaterexists = false;
+                let restaurantexists = false;
+                // $(".star").attr("style", "display:block;")
+                dinnermovie.firestore.collection("users").doc(user.uid).collection("theaters").get().then(function(querySnapshot) {
+                    let theaterhtml;
+                    theaterhtml = "<h1 class=\"text-center\">Theaters</h1><ul class=\"collapsible\" id=\"restaurant_list\">";
+                    querySnapshot.forEach(function(doc) {
+                        theaterexists = true;
+                        theaterhtml += "<li><div class=\"collapsible-header\"><i class=\"material-icons\">place</i><span class=\"bus-name\">" + doc.data().name + "</span><span class=\"new badge\" data-badge-caption=\"\">" + doc.data().rating + " stars</span>"
+                        theaterhtml += "<a href=\"#\"><img src=\"{% static '/homepage/stars/full-star.png' %}\" class=\"star\" id=\"" + doc.data().yelp_id + "\" data-gray_star=\"{% static '/homepage/stars/gray-star.png' %}\" data-full_star=\"{% static '/homepage/stars/full-star.png' %}\" data-full=\"1\" data-yelp_id=\"" + doc.data().yelp_id + "\" data-address=\"" + doc.data().address + "\" data-phone=\"" + doc.data().phone + "\" data-rating=\"" + doc.data().rating + "\" data-name=\"" + doc.data().name + "\" data-image=\"" + doc.data().image + "\" data-src=\"{% static '/homepage/stars/gray-star.png' %}\" /></a>"
+                        theaterhtml += "</div><div class=\"collapsible-body\"><p>" + doc.data().address + "</p><p>" + doc.data().phone + "</p><p>Rating: " + doc.data().rating + "</p></div></li>";
+                        yelp_theater_ids.push(doc.data().yelp_id);
+                    });
+                    if (theaterexists) {
+                        theaterhtml += "</ul></div>";
+                        // document.getElementById("theaters").innerHTML = theaterhtml;
+                        $("#theaters").html(theaterhtml);
+                        $('.collapsible').collapsible();
+                    }
+                    yelp_theater_ids.forEach(function(id) {
+                        $("#" + id).hover(function () {
+                            if ($(this).data("full") === 0) {
+                                $(this).attr("src", $(this).data("full_star"));
+                            } else if ($(this).data("full") === 1) {
+                                $(this).attr("src", $(this).data("gray_star"));
+                            }
+                        },
+                        function () {
+                            if ($(this).data("full") === 0) {
+                                $(this).attr("src", $(this).data("gray_star"));
+                            } else if ($(this).data("full") === 1) {
+                                $(this).attr("src", $(this).data("full_star"));
+                            }
+                        });
+                        $("#" + id).click(function (event) {
+                            event.preventDefault();
+                            if ($(this).data("full") === 0) {
+                                $(this).data("full", 1);
+                                console.log("saving");
+                                dinnermovie.save_theater($(this).data("yelp_id"), $(this).data("name"), $(this).data("address"), $(this).data("phone"), $(this).data("rating"), $(this).data("image"));
+                            } else if ($(this).data("full") === 1) {
+                                $(this).data("full", 0);
+                                console.log("deleting");
+                                dinnermovie.delete_theater($(this).data("yelp_id"));
+                            }
+                            return false;
+                        })
+                    });
+                });
+                dinnermovie.firestore.collection("users").doc(user.uid).collection("restaurants").get().then(function(querySnapshot) {
+
+                    let restauranthtml;
+                    restauranthtml = "<h1 class=\"text-center\">Restaurants</h1><ul class=\"collapsible\" id=\"restaurant_list\">";
+                    querySnapshot.forEach(function(doc) {
+                        restaurantexists = true;
+                        // restauranthtml += "<li><div class=\"collapsible-header\"><img src=\"" + doc.data().image + "\" alt=\"\" class=\"circle bus_image\"><span class=\"bus-name\">" + doc.data().name + "</span><span class=\"new badge\" data-badge-caption=\"\">" + doc.data().rating + " stars</span><a href=\"#\"><img src=\"{% static '/homepage/stars/full-star.png' %}\" class=\"star\" /></a></div><div class=\"collapsible-body\"><p>" + doc.data().address + "</p><p>" + doc.data().phone + "</p><p>Rating: " + doc.data().rating + "</p></div></li>";
+                        restauranthtml += "<li><div class=\"collapsible-header\"><img src=\"" + doc.data().image + "\" alt=\"\" class=\"circle bus_image\"><span class=\"bus-name\">" + doc.data().name + "</span><span class=\"new badge\" data-badge-caption=\"\">" + doc.data().rating + " stars</span>"
+                        restauranthtml += "<a href=\"#\"><img src=\"{% static '/homepage/stars/full-star.png' %}\" class=\"star\" id=\"" + doc.data().yelp_id + "\" data-gray_star=\"{% static '/homepage/stars/gray-star.png' %}\" data-full_star=\"{% static '/homepage/stars/full-star.png' %}\" data-full=\"1\" data-yelp_id=\"" + doc.data().yelp_id + "\" data-address=\"" + doc.data().address + "\" data-phone=\"" + doc.data().phone + "\" data-rating=\"" + doc.data().rating + "\" data-name=\"" + doc.data().name + "\" data-image=\"" + doc.data().image + "\" data-src=\"{% static '/homepage/stars/gray-star.png' %}\" /></a>"
+                        restauranthtml += "</div><div class=\"collapsible-body\"><p>" + doc.data().address + "</p><p>" + doc.data().phone + "</p><p>Rating: " + doc.data().rating + "</p></div></li>";
+                        yelp_restaurant_ids.push(doc.data().yelp_id);
+                    });
+                    if (restaurantexists) {
+                        restauranthtml += "</ul></div>";
+                        // document.getElementById("restaurants").innerHTML = restauranthtml;
+                        $("#restaurants").html(restauranthtml);
+                        $('.collapsible').collapsible();
+                    }
+                    yelp_restaurant_ids.forEach(function(id) {
+                        $("#" + id).hover(function () {
+                            if ($(this).data("full") === 0) {
+                                $(this).attr("src", $(this).data("full_star"));
+                            } else if ($(this).data("full") === 1) {
+                                $(this).attr("src", $(this).data("gray_star"));
+                            }
+                        },
+                        function () {
+                            if ($(this).data("full") === 0) {
+                                $(this).attr("src", $(this).data("gray_star"));
+                            } else if ($(this).data("full") === 1) {
+                                $(this).attr("src", $(this).data("full_star"));
+                            }
+                        });
+                        $("#" + id).click(function (event) {
+                            event.preventDefault();
+                            if ($(this).data("full") === 0) {
+                                $(this).data("full", 1);
+                                console.log("saving");
+                                dinnermovie.save_restaurant($(this).data("yelp_id"), $(this).data("name"), $(this).data("address"), $(this).data("phone"), $(this).data("rating"), $(this).data("image"));
+                            } else if ($(this).data("full") === 1) {
+                                $(this).data("full", 0);
+                                console.log("deleting");
+                                dinnermovie.delete_restaurant($(this).data("yelp_id"));
+                            }
+                            return false;
+                        })
+                    });
+                });
+                // $(".star").click(function (event) {
+                //     event.preventDefault();
+                //     $(this).attr("style","width:100px;")
+                //     return false;
+                // })
+                return true;
+            } else {
+                // No user is signed in.
+                $("#restaurants").html("");
+                $("theaters").html("");
+                return false;
+            }
+        });
     });
     </script>
 {% endblock content %}

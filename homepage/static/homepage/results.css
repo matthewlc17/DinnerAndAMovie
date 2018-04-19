@@ -1,4 +1,61 @@
 #map {
     height: 630px;
-    width: 100%;
+    /* width: 100%; */
+    margin-top: 8px;
+    /* position: absolute;
+    margin-left: 30%;
+    display: flex;
+    flex: 1 1 70%; */
+    min-width: 100%;
+    max-width: 100%;
+}
+#mymap {
+    position: absolute;
+    margin-left: 36%;
+    width: 63%;
+}
+#businesses {
+    overflow-y: scroll;
+    position: absolute;
+    height: 640px;
+    width: 34%;
+    margin-left: 1%;
+}
+#businesses2 {
+    overflow-y: scroll;
+    position: absolute;
+    height: 640px;
+    width: 29%;
+    margin-left: 100%;
+}
+.star {
+    width:20px;
+    height:20px;
+    margin-left:7px;
+    margin-right:-10px;
+}
+#landing-title {
+    padding-top:80px;
+    padding-bottom:30px;
+    /* font-size:3em; */
+}
+#logoutButton {
+    margin-top: 25px;
+}
+#username {
+    margin-right: 15px;
+}
+.collapsible-body {
+    background-color: white;
+}
+.bus_image {
+    /* max-width: 100%;
+    max-height:100%; */
+    width:55px;
+    height:55px;
+}
+.bus-name {
+    margin-left: 20px;
+    font-size: 22px;
+    width:50%;
 }

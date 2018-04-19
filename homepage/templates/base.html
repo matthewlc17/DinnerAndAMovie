@@ -23,6 +23,10 @@
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-firestore.js"></script>
+    <script src="{% static '/homepage/results.js' %}"></script>
+
     <!-- Custom CSS -->
     <!-- <link href="{% static 'main.css' %}" rel="stylesheet" type="text/css"> -->
 
@@ -61,66 +65,43 @@
             js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=392880067827449&autoLogAppEvents=1';
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
+
     </script>
     <header>
-        <nav>
-            <div class="nav-wrapper">
-                <a href="/" class="brand-logo"><!--<img src="{% static '/homepage/XLR8_large_colored_lightback.png' %}" style="width:100px;"/>-->Dinner and a Movie</a>
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a href="sass.html">Sass</a></li>
-                    <li><a href="badges.html">Components</a></li>
-                    <li><a href="collapsible.html">JavaScript</a></li>
-                </ul>
+        <nav class="navbar navbar-toggleable-md navbar-toggleable-sm navbar-toggleable-xs navbar-light bg-faded" style="box-shadow:none;">
+            <!-- <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button> -->
+            <a class="navbar-brand" href="/">
+                <img src="" width="30" height="30" class="" alt="">
+                DinnerAndAMovie&reg; <span style="font-size: 60%; font-family:sans-serif;">by Matt</span>
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav ml-auto">
+                  <p class="nav-item nav-link active" id="username"></p>
+                  <a id="loginButton" class="btn nav-item nav-link active nav_btn hide-on-small-only" onclick="dinnermovie.loginListener()">Login</a>
+                  <a id="logoutButton" class="btn nav-item nav-link active nav_btn hide-on-small-only" onclick="dinnermovie.logoutListener()" style="display:none;">Logout</a>
+                <!-- <a class="nav-item nav-link active btn"id="loginButton" href="/">Login <span class="sr-only">(current)</span></a> -->
+                <!-- <a class="nav-item nav-link" href="/team">Our Team</a>
+                <a class="nav-item nav-link" href="/data">The Data</a> -->
+              </div>
             </div>
-        </nav>
+          </nav>
     </header>
-    <!-- <div class="container">
-        <ul class="collection">
-            <li class="collection-item avatar">
-              <img src="images/yuna.jpg" alt="" class="circle">
-              <span class="title">Title</span>
-              <p>First Line <br>
-                 Second Line
-              </p>
-              <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-            </li>
-            <li class="collection-item avatar">
-              <i class="material-icons circle">folder</i>
-              <span class="title">Title</span>
-              <p>First Line <br>
-                 Second Line
-              </p>
-              <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-            </li>
-            <li class="collection-item avatar">
-              <i class="material-icons circle green">insert_chart</i>
-              <span class="title">Title</span>
-              <p>First Line <br>
-                 Second Line
-              </p>
-              <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-            </li>
-            <li class="collection-item avatar">
-              <i class="material-icons circle red">play_arrow</i>
-              <span class="title">Title</span>
-              <p>First Line <br>
-                 Second Line
-              </p>
-              <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-            </li>
-        </ul>
-    </div> -->
+    <script>
+    $(document).ready(function(){
+        dinnermovie.checkUserState();
+    });
+
+
+    </script>
     {% block content %}
 
 
 
     {% endblock content %}
-<!-- <script type="text/javascript" src="{% static "main.js" %}"></script>
-<script type="text/javascript" src="{% static "lottie.js" %}"></script>
-<script type="text/javascript" src="{% static "animation.js" %}"></script> -->
 
 </body>
-
 
 
 </html>
