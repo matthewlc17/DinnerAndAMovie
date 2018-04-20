@@ -18,7 +18,7 @@
     </div>
     <div class="section white">
       <div class="container">
-        <h2 class="header">Input Your Location To Find Local Theaters</h2><br />
+        <h2 class="header text-center">Input Your Location To Find Local Theaters</h2><br />
         <div class="col m4">
             <p class="grey-text text-darken-3 lighten-3">
                 <form class="" action="/homepage/landingpage/" method="post">
@@ -46,7 +46,6 @@
     var instance = M.Parallax.getInstance(elem);
     $(document).ready(function(){
         $('.parallax').parallax();
-        // dinnermovie.getFavorites();
         firebase.auth().onAuthStateChanged(function(tempuser) {
             let yelp_theater_ids = [];
             let yelp_restaurant_ids = [];
@@ -54,7 +53,6 @@
                 user = tempuser;
                 let theaterexists = false;
                 let restaurantexists = false;
-                // $(".star").attr("style", "display:block;")
                 dinnermovie.firestore.collection("users").doc(user.uid).collection("theaters").get().then(function(querySnapshot) {
                     let theaterhtml;
                     theaterhtml = "<h1 class=\"text-center\">Theaters</h1><ul class=\"collapsible\" id=\"restaurant_list\">";
@@ -67,7 +65,6 @@
                     });
                     if (theaterexists) {
                         theaterhtml += "</ul></div>";
-                        // document.getElementById("theaters").innerHTML = theaterhtml;
                         $("#theaters").html(theaterhtml);
                         $('.collapsible').collapsible();
                     }
@@ -107,7 +104,6 @@
                     restauranthtml = "<h1 class=\"text-center\">Restaurants</h1><ul class=\"collapsible\" id=\"restaurant_list\">";
                     querySnapshot.forEach(function(doc) {
                         restaurantexists = true;
-                        // restauranthtml += "<li><div class=\"collapsible-header\"><img src=\"" + doc.data().image + "\" alt=\"\" class=\"circle bus_image\"><span class=\"bus-name\">" + doc.data().name + "</span><span class=\"new badge\" data-badge-caption=\"\">" + doc.data().rating + " stars</span><a href=\"#\"><img src=\"{% static '/homepage/stars/full-star.png' %}\" class=\"star\" /></a></div><div class=\"collapsible-body\"><p>" + doc.data().address + "</p><p>" + doc.data().phone + "</p><p>Rating: " + doc.data().rating + "</p></div></li>";
                         restauranthtml += "<li><div class=\"collapsible-header\"><img src=\"" + doc.data().image + "\" alt=\"\" class=\"circle bus_image\"><span class=\"bus-name\">" + doc.data().name + "</span><span class=\"new badge\" data-badge-caption=\"\">" + doc.data().rating + " stars</span>"
                         restauranthtml += "<a href=\"#\"><img src=\"{% static '/homepage/stars/full-star.png' %}\" class=\"star\" id=\"" + doc.data().yelp_id + "\" data-gray_star=\"{% static '/homepage/stars/gray-star.png' %}\" data-full_star=\"{% static '/homepage/stars/full-star.png' %}\" data-full=\"1\" data-yelp_id=\"" + doc.data().yelp_id + "\" data-address=\"" + doc.data().address + "\" data-phone=\"" + doc.data().phone + "\" data-rating=\"" + doc.data().rating + "\" data-name=\"" + doc.data().name + "\" data-image=\"" + doc.data().image + "\" data-src=\"{% static '/homepage/stars/gray-star.png' %}\" /></a>"
                         restauranthtml += "</div><div class=\"collapsible-body\"><p>" + doc.data().address + "</p><p>" + doc.data().phone + "</p><p>Rating: " + doc.data().rating + "</p></div></li>";
@@ -115,7 +111,6 @@
                     });
                     if (restaurantexists) {
                         restauranthtml += "</ul></div>";
-                        // document.getElementById("restaurants").innerHTML = restauranthtml;
                         $("#restaurants").html(restauranthtml);
                         $('.collapsible').collapsible();
                     }
@@ -149,11 +144,6 @@
                         })
                     });
                 });
-                // $(".star").click(function (event) {
-                //     event.preventDefault();
-                //     $(this).attr("style","width:100px;")
-                //     return false;
-                // })
                 return true;
             } else {
                 // No user is signed in.

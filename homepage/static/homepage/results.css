@@ -1,32 +1,20 @@
 #map {
     height: 630px;
-    /* width: 100%; */
     margin-top: 8px;
-    /* position: absolute;
-    margin-left: 30%;
-    display: flex;
-    flex: 1 1 70%; */
     min-width: 100%;
     max-width: 100%;
 }
 #mymap {
-    position: absolute;
-    margin-left: 36%;
-    width: 63%;
+    /* position: absolute; */
+    /* margin-left: 36%; */
+    /* width: 63%; */
 }
 #businesses {
     overflow-y: scroll;
-    position: absolute;
+    /* position: absolute; */
     height: 640px;
-    width: 34%;
-    margin-left: 1%;
-}
-#businesses2 {
-    overflow-y: scroll;
-    position: absolute;
-    height: 640px;
-    width: 29%;
-    margin-left: 100%;
+    /* width: 34%;
+    margin-left: 1%; */
 }
 .star {
     width:20px;

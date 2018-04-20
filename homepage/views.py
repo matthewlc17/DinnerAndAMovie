@@ -34,7 +34,7 @@ class VideoGameForm(forms.Form):
         self.request = kwargs.pop('request', None)
         super(VideoGameForm, self).__init__(*args, **kwargs)
 
-        self.fields['location'] = forms.CharField(label="", required=True, max_length=100, widget=forms.TextInput(attrs={'placeholder':'Enter City, State, or Zipcode', 'class':'form-control'}))
+        self.fields['location'] = forms.CharField(label="", required=True, max_length=100, widget=forms.TextInput(attrs={'placeholder':'Provo, UT 84604', 'class':'form-control'}))
 
     def clean(self):
         cleaned_data = super().clean()
@@ -97,7 +97,6 @@ def restaurants(request, latitude, longitude):
     businesses = []
     # create a list of businesses from the search response
     for business in myresponse.get('businesses'):
-        print(business)
         # business['distance'] = round((business['distance'] / 1609.34), 2)
         # business['phone'] = business['phone'][1] + ' (' + business['phone'][2:5] + ') ' + business['phone'][5:8] + '-' + business['phone'][8:12]
         businesses.append(business)

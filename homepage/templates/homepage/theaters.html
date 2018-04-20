@@ -7,7 +7,7 @@
 
 {% block content %}
 <div class="row">
-    <div class="" id="businesses">
+    <div class="col-md-5" id="businesses">
         <div id="selected-bus"></div>
         <ul class="collapsible" id="business_list" data-length="{{businesses|length}}">
             {% for business in businesses %}
@@ -29,7 +29,7 @@
             {% endfor %}
         </ul>
     </div>
-    <div class="text-center" id="mymap">
+    <div class="col-md-7">
         <div id="map"></div>
     </div>
 </div>
