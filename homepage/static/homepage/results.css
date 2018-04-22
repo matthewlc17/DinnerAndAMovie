@@ -16,6 +16,12 @@
     /* width: 34%;
     margin-left: 1%; */
 }
+/*Display for smaller devices*/
+@media (max-width: 991px) {
+    div > #businesses {
+        height: 100%;
+    }
+}
 .star {
     width:20px;
     height:20px;

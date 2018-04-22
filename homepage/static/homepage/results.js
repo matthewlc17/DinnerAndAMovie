@@ -10,56 +10,33 @@ const dinnermovie = (function () {
         messagingSenderId: "383991887259"
     };
     firebase.initializeApp(config);
-    var provider = new firebase.auth.GoogleAuthProvider();
-    var firestore = firebase.firestore();
-    var loginButton =  document.querySelector("#loginButton");
-    var logoutButton = document.querySelector("#logoutButton");
-    let restaurants = [];
-    let theaters = [];
 
-    let user;
+    // INITIALIZE VARIABLES
+    let checkUserState;
+    let delete_theater;
+    let delete_restaurant;
+    let firestore = firebase.firestore();
+    let initMap;
+    let loginListener;
+    let logoutListener;
     let mymarkers = [];
+    let provider = new firebase.auth.GoogleAuthProvider();
+    let record_user;
+    let restaurants = [];
+    let save_theater;
+    let save_restaurant;
+    let theaters = [];
+    let user;
+    let userStateCallback;
+
+
+
     firebase.auth().onAuthStateChanged(function(tempuser) {
         if (tempuser) {
             user = tempuser;
             console.log(user);
         }
     });
-
-    function loginListener () {
-        firebase.auth().signInWithPopup(provider).then(function(result) {
-            user = result.user;
-            console.log("user", user);
-            record_user(user);
-            checkUserState();
-            // loginButton.style.display='none';
-            // logoutButton.style.display='inline';
-        });
-    }
-    function logoutListener (){
-        firebase.auth().signOut().then(function() {
-            checkUserState();
-            // logoutButton.style.display='none';
-            // loginButton.style.display='inline';
-            // document.querySelector("#heading").innerHTML = 'General Conference Quotes';
-            user={};
-        }, function(error) {
-            // An error happened.
-            console.log(error);
-        });
-    }
-    function record_user(user){
-        firestore.collection("users").doc(user.uid).set({
-            "name":user.displayName,
-            "email":user.email,
-            "photo":user.photoURL,
-            "lastLogin":firebase.firestore.FieldValue.serverTimestamp()
-        }).catch(function(error){
-            // tag("msg").innerHTML='record_user: '+error;
-            // tag("message").style.display="block";
-            console.log('record_user: '+error);
-        });
-    }
 
     // function successfulLogin () {
     //     document.getElementById("loginButton").style.display='none';
@@ -74,12 +51,12 @@ const dinnermovie = (function () {
     //     $(".star").attr("style", "display:none;");
     // }
 
-    function checkUserState (callback) {
+    checkUserState = function(callback) {
         firebase.auth().onAuthStateChanged(function(tempuser) {
             if (tempuser) {
                 // User is signed in.
-                document.getElementById("loginButton").style.display='none';
-                document.getElementById("logoutButton").style.display='inline';
+                $("#loginButton").attr("style","display:none;")
+                $("#logoutButton").attr("style","display:inline;")
                 $("#username").html("Hello, " + user.displayName + "!");
                 if (typeof callback === "function") {
                     $(".star").attr("style", "display:block;")
@@ -100,35 +77,23 @@ const dinnermovie = (function () {
             } else {
                 // No user is signed in.
                 $("#username").html("");
-                document.getElementById("logoutButton").style.display='none';
-                document.getElementById("loginButton").style.display='inline';
+                $("#loginButton").attr("style","display:inline;")
+                $("#logoutButton").attr("style","display:none;")
                 $(".star").attr("style", "display:none;");
                 return false;
             }
         });
     }
 
-    function checkUserState2 () {
-        firebase.auth().onAuthStateChanged(function(tempuser) {
-            if (tempuser) {
-                // callback();
-                return true;
-            } else {
-                // No user is signed in.
-                return false;
-            }
-        });
-    }
-
-    function delete_theater(yelp_id){
+    delete_theater = function (yelp_id){
         firestore.collection("users").doc(user.uid).collection("theaters").doc(yelp_id).delete();
     }
 
-    function delete_restaurant(yelp_id){
+    delete_restaurant = function (yelp_id){
         firestore.collection("users").doc(user.uid).collection("restaurants").doc(yelp_id).delete();
     }
 
-    function initMap() {
+    initMap = function () {
         let mylat = $('#business-1').data('lat');
         let mylon = $('#business-1').data('lon');
         let business_length = $('#business_list').data("length");
@@ -215,14 +180,45 @@ const dinnermovie = (function () {
             map.fitBounds(latlngbounds);
         } else if (mymarkers.length === 1) {
             map.setZoom(11);
-            map.panTo(gmMarkers[0].position);
+            map.panTo(mymarkers[0].position);
         } else {
             map.setZoom(11);
             map.panTo(uluru);
         }
     }
 
-    function save_restaurant(yelp_id, name, address, phone, rating, image){
+    loginListener = function () {
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+            user = result.user;
+            record_user(user);
+            checkUserState();
+        });
+    }
+
+    logoutListener = function (){
+        firebase.auth().signOut().then(function() {
+            checkUserState();
+            user={};
+        }, function(error) {
+            // An error happened.
+            console.log(error);
+        });
+    }
+
+    record_user = function (user){
+        firestore.collection("users").doc(user.uid).set({
+            "name":user.displayName,
+            "email":user.email,
+            "photo":user.photoURL,
+            "lastLogin":firebase.firestore.FieldValue.serverTimestamp()
+        }).catch(function(error){
+            // tag("msg").innerHTML='record_user: '+error;
+            // tag("message").style.display="block";
+            console.log('record_user: '+error);
+        });
+    }
+
+    save_restaurant = function (yelp_id, name, address, phone, rating, image){
         console.log("saving restaurant");
         var doc = firestore.collection("users").doc(user.uid).collection("restaurants").doc(yelp_id);
         doc.set({
@@ -235,7 +231,7 @@ const dinnermovie = (function () {
         });
     }
 
-    function save_theater(yelp_id, name, address, phone, rating, image){
+    save_theater = function (yelp_id, name, address, phone, rating, image){
         console.log("saving theater");
         var doc = firestore.collection("users").doc(user.uid).collection("theaters").doc(yelp_id);
         doc.set({
@@ -248,7 +244,7 @@ const dinnermovie = (function () {
         });
     }
 
-    function userStateCallback () {
+    userStateCallback = function () {
         let business_length = $('#business_list').data("length");
         let yelp_array = [];
         for (let i = 1; i <= business_length; i++) {
@@ -264,25 +260,18 @@ const dinnermovie = (function () {
         }
     }
 
-    function handleStarClick() {
-        $(this).attr("style", "width:100px;")
-    }
-
     return {
-        initMap : initMap,
-        userStateCallback: userStateCallback,
         checkUserState: checkUserState,
-        checkUserState2: checkUserState2,
-        loginListener: loginListener,
-        logoutListener: logoutListener,
-        user: user,
-        firestore: firestore,
-        handleStarClick: handleStarClick,
         delete_restaurant: delete_restaurant,
         delete_theater: delete_theater,
+        firestore: firestore,
+        initMap : initMap,
+        loginListener: loginListener,
+        logoutListener: logoutListener,
         save_restaurant: save_restaurant,
-        save_theater: save_theater
-        // getFavorites: getFavorites
+        save_theater: save_theater,
+        user: user,
+        userStateCallback: userStateCallback
     };
 
 }());
