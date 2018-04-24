@@ -1,3 +1,10 @@
+ # *==================================================
+ # * File:    views.py
+ # * Author:  Matthew Christensen
+ # * Date:    Winter 2018
+ #
+ # * Description: Python code for DinnerAndAMovie
+
 from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse

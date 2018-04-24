@@ -1,3 +1,10 @@
+/*==================================================
+ * File:    results.js
+ * Author:  Matthew Christensen
+ * Date:    Winter 2018
+
+ * Description: Javascript code for DinnerAndAMovie
+*/
 const dinnermovie = (function () {
 
     // Initialize Firebase

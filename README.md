@@ -1,5 +1,10 @@
 # DinnerAndAMovie
 ****UPDATED****
+Javascript code can be found in the results.js file. The views.py inside of
+the homepage application handles the python logic. results.css has the styles
+of the app. landingpage.html, restaruants.html, and theaters.html have the three
+pages of the website. All these are also found in the homepage app.
+
 *Description*
 DinnerAndAMovie allows you to enter your location and see the movie theaters
 nearby. Then, from the list of theaters, you can select the theater of your
@@ -30,7 +35,7 @@ to call the Yelp API from the front end side using purely Javascript/jQuery
 only to be defeated. I set out to do this project in React, but unfortunately, I
 was having a really hard time getting things to work, with  my lack of
 experience. So, I decided to use Django, using python only when necessary. I
-considered using a proxy to help me call the Yelp API, but it felt 
+considered using a proxy to help me call the Yelp API, but it felt
 just a little bit too hacky for me and my limited experience. I had fun
 exploring the Yelp API and learning how useful it could be. I also had no
 experience with Google Firebase. My only backend database experience in web
@@ -55,6 +60,3 @@ There are several things that I considered doing that didn't quite make it into
 the final build due to time and scope concerns. I wanted to add HTML5
 geolocation. I also wanted to add the ability for a user to share their plans
 via text message or Facebook.
-
-I am running out of time and have to submit right now but I will update the
-README with more info.
